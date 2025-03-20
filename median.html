@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Median Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 50%;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Median Finder</h2>
+        <input type="number" id="numberInput" placeholder="Enter a number">
+        <button onclick="insertNumHandler()">Insert</button>
+        <div class="output">
+            <p><strong>Numbers Entered:</strong> <span id="numberList">None</span></p>
+            <p><strong>Median:</strong> <span id="median">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        let maxHeap = [];
+        let minHeap = [];
+        let numbers = [];
+
+        function insertNum(num) {
+            if (maxHeap.length === 0 || num <= maxHeap[0]) {
+                maxHeap.push(num);
+                maxHeap.sort((a, b) => b - a);
+            } else {
+                minHeap.push(num);
+                minHeap.sort((a, b) => a - b);
+            }
+            if (maxHeap.length > minHeap.length + 1) {
+                minHeap.push(maxHeap.shift());
+                minHeap.sort((a, b) => a - b);
+            } else if (minHeap.length > maxHeap.length) {
+                maxHeap.push(minHeap.shift());
+                maxHeap.sort((a, b) => b - a);
+            }
+        }
+
+        function findMedian() {
+           if (maxHeap.length === minHeap.length) {
+                return ((maxHeap[0] + minHeap[0]) / 2).toFixed(2);
+            } else {
+                return maxHeap[0];
+            }
+        }
+
+        function insertNumHandler() {
+            let input = document.getElementById("numberInput");
+            let value = parseInt(input.value);
+
+            
+                numbers.push(value);
+                insertNum(value);
+                document.getElementById("numberList").innerText = numbers.join(", ");
+                document.getElementById("median").innerText = findMedian();
+                input.value = ""; 
+            
+        }
+    </script>
+
+</body>
+</html>
